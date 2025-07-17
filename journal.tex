@@ -40,22 +40,34 @@
 \define@key{todo}{done}[true]{\TodoIsDonetrue}
 \newif\ifTodoIsStruck
 \define@key{todo}{strike}[true]{\TodoIsStrucktrue}
+\newif\ifTodoIsParent
+\define@key{todo}{parent}[true]{\TodoIsParenttrue}
 
 \newcommand{\todotextformat}[1]{#1}
 % Macro to add a todo/task
 \newcommand{\todo}[2][]{%
+\def\todocolor{blue}%
+\TodoIsParentfalse%
+  % Parse key=val options
+ \setkeys{todo}{#1}%
+
+
+\ifTodoIsParent
+  \def\todocolor{magenta}
+\else
   % Increment the counter and make it referenceable
   \refstepcounter{todonotesnumber}%
   \phantomsection % Create an anchor here
-  \def\todocolor{blue}%
+\fi
     \TodoIsDonefalse%
-  % Parse key=val options
-  \setkeys{todo}{#1}%
 \ifTodoIsStruck
   \renewcommand{\todotextformat}[1]{\sout{##1}}%
 \else
   \renewcommand{\todotextformat}[1]{##1}%
 \fi
+\ifTodoIsParent
+  \addcontentsline{tdo}{section}{\textcolor{\todocolor}{~#2}}%
+\else
 	\ifTodoIsDone
     % Do not write to .tdo file
 	  \addcontentsline{odo}{section}{~\thetodonotesnumber: \textcolor{\todocolor}{~ #2}}%
@@ -63,8 +75,15 @@
   % Add to Table of Contents
 	  \addcontentsline{tdo}{section}{~\thetodonotesnumber:\textcolor{\todocolor}{~ #2}}%
 \fi
+\fi
   % Display in text
-\par\noindent\textbf{~\thetodonotesnumber:}~ \todotextformat{#2}\par
+\ifTodoIsParent
+\par\noindent
+\textcolor{\todocolor}{\todotextformat{#2}}
+\par
+\else
+  \textbf{~\thetodonotesnumber:}~\todotextformat{#2}\par
+\fi
 }
 
 \newcommand{\backlog}[2][]{%
