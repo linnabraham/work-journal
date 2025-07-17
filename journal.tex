@@ -52,6 +52,7 @@
 
 \def\todocolor{blue}%
 \TodoIsParentfalse%
+\TodoIsDonefalse%
   % Parse key=val options
  \setkeys{todo}{#1}%
 
@@ -72,7 +73,7 @@
   \label{\todolabel}
 \fi
 
-    \TodoIsDonefalse%
+
 \ifTodoIsStruck
   \renewcommand{\todotextformat}[1]{\sout{##1}}%
 \else
