@@ -64,6 +64,7 @@
   % Increment the counter and make it referenceable
   \refstepcounter{todonotesnumber}%
   \phantomsection % Create an anchor here
+  \edef\todolabel{\thetodonotesnumber}%
 \fi
 
 %If a label was provided, save content to macro
@@ -80,6 +81,7 @@
 \else
   \renewcommand{\todotextformat}[1]{##1}%
 \fi
+
 \ifTodoIsParent
   \addcontentsline{tdo}{section}{\textcolor{\todocolor}{~#2}}%
 \else
