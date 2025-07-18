@@ -136,6 +136,39 @@
   }\par
 }
 
+\newif\ifHighlightTodoIsDone
+\define@key{highlighttodo}{done}[true]{\HighlightTodoIsDonetrue}
+
+\newcommandx{\highlighttodo}[3][1=blue,2=]{%
+  \HighlightTodoIsDonefalse % reset
+  \setkeys{highlighttodo}{#2}%
+
+  \@ifundefined{todocontent@#3}{%
+    \typeout{[WARN] Tried to highlight undefined todo: #3}%
+    \par\noindent\textcolor{red}{[Missing todo #3]}%
+  }{%
+    \phantomsection
+    \ifHighlightTodoIsDone
+    \par\noindent
+    \fcolorbox{#1!50!black}{#1!5}{%
+      \begin{minipage}{\dimexpr\linewidth-2\fboxsep-2\fboxrule}
+      \textbf{Todo \ref{#3}}:\par
+	  \sout{\textit{\csname todocontent@#3\endcsname}}
+      \end{minipage}
+    }\par
+
+	\else
+	\addcontentsline{tdo}{section}{\textcolor{#1}{(Today)}{~\csname todocontent@#3\endcsname}}%
+    \par\noindent
+    \fcolorbox{#1!50!black}{#1!5}{%
+      \begin{minipage}{\dimexpr\linewidth-2\fboxsep-2\fboxrule}
+      \textbf{Doing Todo \ref{#3}}:\par
+      \textit{\csname todocontent@#3\endcsname}
+      \end{minipage}
+    }\par
+    \fi
+  }%
+}
 
 \newcommand{\listoftodos}{%
   \chapter{List of Todos}
