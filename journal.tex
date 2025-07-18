@@ -37,7 +37,10 @@
 \SetupKeyvalOptions{family=todo,prefix=todo@}
 \define@key{todo}{color}{\def\todocolor{#1}}
 \newif\ifTodoIsDone
-\define@key{todo}{done}[true]{\TodoIsDonetrue}
+\define@key{todo}{done}[true]{%
+  \TodoIsDonetrue
+  \def\tododate{#1}%
+}
 \newif\ifTodoIsStruck
 \define@key{todo}{strike}[true]{\TodoIsStrucktrue}
 \newif\ifTodoIsParent
@@ -51,6 +54,8 @@
 \def\todolabel{}
 
 \def\todocolor{blue}%
+
+\def\tododate{}
 \TodoIsParentfalse%
 \TodoIsStruckfalse%
 \TodoIsDonefalse%
