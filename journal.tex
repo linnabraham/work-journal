@@ -111,6 +111,16 @@
 \newcommand{\backlog}[2][]{%
   \refstepcounter{todonotesnumber}%
   \phantomsection
+  \edef\todolabel{\thetodonotesnumber}
+
+  %If a label was provided, save content to macro
+  \ifx\todolabel\@empty\else
+    \expandafter\gdef\csname todocontent@\todolabel\endcsname{#2}
+    \expandafter\gdef\csname todonumber@\todolabel\endcsname{\thetodonotesnumber}
+    \phantomsection % create an anchor for hyperref
+    \label{\todolabel}
+  \fi
+
   \def\todocolor{OliveGreen}%
   \TodoIsDonefalse%
   \TodoIsStruckfalse%
