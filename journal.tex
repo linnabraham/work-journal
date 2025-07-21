@@ -1,5 +1,6 @@
 \documentclass[notoc]{tufte-book}
 \usepackage[normalem]{ulem}
+\usepackage{fontawesome5}
 \usepackage{soul}
 \usepackage{hyperref}
 %\usepackage{todonotes}
@@ -46,6 +47,8 @@
 \newif\ifTodoIsParent
 \define@key{todo}{parent}[true]{\TodoIsParenttrue}
 \define@key{todo}{label}{\def\todolabel{#1}}
+\newif\ifTodoIsBacklog
+\define@key{todo}{backlog}[true]{\TodoIsBacklogtrue}
 
 \newcommand{\todotextformat}[1]{#1}
 % Macro to add a todo/task
@@ -59,6 +62,7 @@
 \TodoIsParentfalse%
 \TodoIsStruckfalse%
 \TodoIsDonefalse%
+\TodoIsBacklogfalse
   % Parse key=val options
  \setkeys{todo}{#1}%
 
@@ -94,7 +98,13 @@
 	  \addcontentsline{odo}{section}{~\thetodonotesnumber: \textcolor{\todocolor}{~ #2}}%
   \else
   % Add to Table of Contents
+  \ifTodoIsBacklog
+    \def\todocolor{OliveGreen}%
+    \addcontentsline{bgo}{section}{~\thetodonotesnumber:\textcolor{\todocolor}{~ #2}}%
+  \else
+
 	  \addcontentsline{tdo}{section}{~\thetodonotesnumber:\textcolor{\todocolor}{~ #2}}%
+  \fi
 \fi
 \fi
   % Display in text
@@ -103,36 +113,14 @@
 \textcolor{\todocolor}{\todotextformat{#2}}
 \par
 \else
+  \ifTodoIsBacklog
+    \def\todocolor{gray}%
+	\textbf{~\thetodonotesnumber:}~\backlog{\todotextformat{#2}}\par
+  \else
+
   \textbf{~\thetodonotesnumber:}~\todotextformat{#2}\par
 \fi
-}
-
-\newcommand{\backlog}[2][]{%
-  \refstepcounter{todonotesnumber}%
-  \phantomsection
-  \edef\todolabel{\thetodonotesnumber}
-
-  %If a label was provided, save content to macro
-  \ifx\todolabel\@empty\else
-    \expandafter\gdef\csname todocontent@\todolabel\endcsname{#2}
-    \expandafter\gdef\csname todonumber@\todolabel\endcsname{\thetodonotesnumber}
-    \phantomsection % create an anchor for hyperref
-    \label{\todolabel}
-  \fi
-
-  \def\todocolor{OliveGreen}%
-  \TodoIsDonefalse%
-  \TodoIsStruckfalse%
-  \setkeys{todo}{#1}%
-  \ifTodoIsStruck
-    \renewcommand{\todotextformat}[1]{\sout{##1}}%
-  \else
-    \renewcommand{\todotextformat}[1]{##1}%
-  \fi
-  % Add to Backlog ToC
-  \addcontentsline{bgo}{section}{~\thetodonotesnumber:\textcolor{\todocolor}{~ #2}}%
-  % Display in text
-  \par\noindent\textbf{~\thetodonotesnumber:}~ \todotextformat{#2}\par
+\fi
 }
 
 \newcommand{\showtodo}[1]{%
@@ -196,6 +184,8 @@
 \makeatother
 \newcommand{\now}{\todo[color=red]}
 
+\newcommand{\brown}[1]{\textcolor{brown}{#1}}
+\newcommand{\backlog}[1]{\textcolor{brown}{\faPaperclip~}{#1}}
 
 \begin{document}
 
