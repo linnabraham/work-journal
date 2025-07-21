@@ -69,15 +69,14 @@
   % Increment the counter and make it referenceable
   \refstepcounter{todonotesnumber}%
   \phantomsection % Create an anchor here
-  \edef\todolabel{\thetodonotesnumber}%
 \fi
 
 %If a label was provided, save content to macro
 \ifx\todolabel\@empty\else
-  \expandafter\gdef\csname todocontent@\todolabel\endcsname{#2}
-  \expandafter\gdef\csname todonumber@\todolabel\endcsname{\thetodonotesnumber}
+  \expandafter\gdef\csname todocontent@\tododateprefix:\todolabel\endcsname{#2}
+  \expandafter\gdef\csname todonumber@\tododateprefix:\todolabel\endcsname{\thetodonotesnumber}
   \phantomsection % create an anchor for hyperref
-  \label{\todolabel}
+  \label{\tododateprefix:\todolabel}
 \fi
 
 
