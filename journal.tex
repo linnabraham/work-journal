@@ -1,4 +1,4 @@
-\documentclass[notoc]{tufte-book}
+\documentclass[openany, notoc]{tufte-book}
 \usepackage[normalem]{ulem}
 \usepackage{fontawesome5}
 \usepackage{soul}
@@ -192,6 +192,7 @@
 \chapter{Journal}
 \input{entries.tex}
 \newpage
+\let\cleardoublepage\clearpage % locally disable recto-only behavior
 \listoftodos
 \listofdonetodos
 \listofbacklogs
