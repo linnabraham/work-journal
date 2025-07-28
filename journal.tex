@@ -42,6 +42,14 @@
 %\newcommandx{\itask}[2][1=]{\todo[color=white,bordercolor=white,inline,#1]{\(\square\)~#2}}
 %\newcommandx{\itask}[2][1=]{\todo[color=white,bordercolor=white,inline,#1]{#2}}
 
+\newcommand{\gettodayasprefix}{%
+  \edef\todayprefix{%
+    \number\year
+    \ifnum\month<10 0\fi\number\month
+    \ifnum\day<10 0\fi\number\day
+  }%
+}
+\gettodayasprefix
 
 % Define the counter
 \newcounter{todonotesnumber}
@@ -82,6 +90,12 @@
   % Parse key=val options
  \setkeys{todo}{#1}%
 
+\edef\tododateforentry{\tododateprefix}
+\newif\ifTodoIsToday
+\TodoIsTodayfalse
+\ifnum\pdfstrcmp{\tododateforentry}{\todayprefix}=0
+  \TodoIsTodaytrue
+\fi
 
 \ifTodoIsParent
   \def\todocolor{magenta}
@@ -122,7 +136,11 @@
   \else
 	  \stepcounter{todocount}
 
-	  \addcontentsline{tdo}{section}{~\thetodonotesnumber:\textcolor{\todocolor}{~ #2}}%
+\ifTodoIsToday
+	\addcontentsline{tdo}{section}{\textcolor{magenta}{(Today)}~\thetodonotesnumber:\textcolor{\todocolor}{~ #2}}%
+\else
+  \addcontentsline{tdo}{section}{~\thetodonotesnumber:\textcolor{\todocolor}{~ #2}}%
+\fi
   \fi
 \fi
 \fi
