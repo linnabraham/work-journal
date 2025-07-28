@@ -134,10 +134,17 @@
 \else
   \ifTodoIsBacklog
     \def\todocolor{gray}%
-	\textbf{~\thetodonotesnumber:}~\backlog{\todotextformat{#2}}\par
+	\textbf{~\thetodonotesnumber:}~\backlog{\todotextformat{#2}}
+
+	\ifx\todolabel\@empty\else
+  \marginnote{\faTag~ \textcolor{violet}{\tododateprefix:\todolabel}}
+	\fi
+\par
   \else
 
-  \textbf{~\thetodonotesnumber:}~\todotextformat{#2}\par
+  \textbf{~\thetodonotesnumber:}~\todotextformat{#2}
+\par
+
 \fi
 \fi
 }
