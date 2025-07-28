@@ -45,6 +45,10 @@
 
 % Define the counter
 \newcounter{todonotesnumber}
+\newcounter{todocount}
+\newcounter{backlogcount}
+\newcounter{donecount}
+
 \makeatletter
 
 \SetupKeyvalOptions{family=todo,prefix=todo@}
@@ -106,14 +110,17 @@
   \addcontentsline{tdo}{section}{\textcolor{\todocolor}{~#2}}%
 \else
 	\ifTodoIsDone
+	  \stepcounter{donecount}
     % Do not write to .tdo file
 	  \addcontentsline{odo}{section}{~\thetodonotesnumber: \textcolor{\todocolor}{~ #2}}%
   \else
   % Add to Table of Contents
   \ifTodoIsBacklog
+	\stepcounter{backlogcount}
     \def\todocolor{OliveGreen}%
     \addcontentsline{bgo}{section}{~\thetodonotesnumber:\textcolor{\todocolor}{~ #2}}%
   \else
+	  \stepcounter{todocount}
 
 	  \addcontentsline{tdo}{section}{~\thetodonotesnumber:\textcolor{\todocolor}{~ #2}}%
   \fi
@@ -181,15 +188,18 @@
 
 \newcommand{\listoftodos}{%
   \chapter{List of Todos}
+  \noindent\showtodocount\par\vspace{1em}
   \@starttoc{tdo}
 }
 \newcommand{\listofdonetodos}{%
   \chapter{List of Done Todos}
+  \noindent\showdonecount\par\vspace{1em}
   \@starttoc{odo}
 }
 
 \newcommand{\listofbacklogs}{%
   \chapter{List of Backlog Tasks}
+  \noindent\showbacklogcount\par\vspace{1em}
   \@starttoc{bgo}
 }
 
@@ -199,6 +209,9 @@
 \newcommand{\brown}[1]{\textcolor{brown}{#1}}
 \newcommand{\distraction}[1]{{\color{brown}{\faRunning~}}{\color{gray}{#1}}}
 \newcommand{\backlog}[1]{\textcolor{brown}{\faPaperclip~}{#1}}
+\newcommand{\showtodocount}{\textbf{Total Pending:} \arabic{todocount}}
+\newcommand{\showdonecount}{\textbf{Completed:} \arabic{donecount}}
+\newcommand{\showbacklogcount}{\textbf{In Backlog:} \arabic{backlogcount}}
 
 \begin{document}
 
