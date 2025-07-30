@@ -238,8 +238,16 @@
 \newcommand{\showdonecount}{\textbf{Completed:} \arabic{donecount}}
 \newcommand{\showbacklogcount}{\textbf{In Backlog:} \arabic{backlogcount}}
 
-\begin{document}
+\newcommand{\quicknav}{%
+  \noindent
+  \textcolor{gray}{\footnotesize
+    [\hyperref[todolist]{\faList~Todos}] \quad
+    [\hyperref[backloglist]{\faPaperclip~Backlog}] \quad
+    [\hyperref[distractionlist]{\faRunning~Distractions}]
+  }\par\vspace{0.5em}
+}
 
+\begin{document}
 \chapter{Journal}
 \input{entries.tex}
 \newpage
