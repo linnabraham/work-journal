@@ -56,6 +56,7 @@
 \newcounter{todocount}
 \newcounter{backlogcount}
 \newcounter{donecount}
+\newcounter{distractioncount}
 
 \makeatletter
 
@@ -73,16 +74,17 @@
 \define@key{todo}{label}{\def\todolabel{#1}}
 \newif\ifTodoIsBacklog
 \define@key{todo}{backlog}[true]{\TodoIsBacklogtrue}
+\define@key{todo}{iu}{\def\todoIU{#1}}
 
 \newcommand{\todotextformat}[1]{#1}
 % Macro to add a todo/task
 \newcommand{\todo}[2][]{%
 %Set a default to avoid undefined errors
 \def\todolabel{}
-
 \def\todocolor{blue}%
-
 \def\tododate{}
+\def\todoIU{iu}
+
 \TodoIsParentfalse%
 \TodoIsStruckfalse%
 \TodoIsDonefalse%
@@ -132,8 +134,14 @@
   \ifTodoIsBacklog
 	\stepcounter{backlogcount}
     \def\todocolor{OliveGreen}%
+	\IfStrEq{\todoIU}{inu}{}{\def\todoIU{inu}} % override iu if not set
     \addcontentsline{bgo}{section}{~\thetodonotesnumber:\textcolor{\todocolor}{~ #2}}%
   \else
+  \IfStrEq{\todoIU}{linu}{%
+	\stepcounter{distractioncount}
+	\def\todocolor{brown}%
+	\addcontentsline{dsn}{section}{~\thetodonotesnumber:\textcolor{\todocolor}{~ #2}}%
+  }{
 	  \stepcounter{todocount}
 
 \ifTodoIsToday
@@ -228,6 +236,14 @@
   \@starttoc{bgo}
 }
 
+\newcommand{\listofdistractions}{%
+  \chapter{Distraction Type 1 } %(linu)
+  \phantomsection
+  \label{distractionlist}
+  \noindent\textbf{Count:} \arabic{distractioncount}\par\vspace{1em}
+  \@starttoc{dsn}
+}
+
 \makeatother
 \newcommand{\now}{\todo[color=red]}
 
@@ -237,6 +253,9 @@
 \newcommand{\showtodocount}{\textbf{Total Pending:} \arabic{todocount}}
 \newcommand{\showdonecount}{\textbf{Completed:} \arabic{donecount}}
 \newcommand{\showbacklogcount}{\textbf{In Backlog:} \arabic{backlogcount}}
+\NewDocumentCommand{\linu}{O{}m}{%
+  \todo[iu=linu, #1]{#2}%
+}
 
 \newcommand{\quicknav}{%
   \noindent
@@ -255,4 +274,5 @@
 \listoftodos
 \listofdonetodos
 \listofbacklogs
+\listofdistractions
 \end{document}
